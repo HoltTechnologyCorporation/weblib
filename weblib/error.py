@@ -72,39 +72,3 @@ class HttpCodeZero(HttpCodeNotValid):
 # ********************
 class NextPageNotFound(WeblibError):
     pass
-
-
-
-# **********
-# Deprecated
-# **********
-class CaptchaError(CaptchaRequired):
-    def __init__(self, *args, **kwargs):
-        logging.error('Class CaptchaError is deprecated. Use CaptchaRequired.')
-        super(CaptchaError, self).__init__(*args, **kwargs)
-
-
-class BanError(RequestBanned):
-    def __init__(self, *args, **kwargs):
-        logging.error('Class BanError is deprecated. Use RequestBanned.')
-        super(BanError, self).__init__(*args, **kwargs)
-
-
-class UnexpectedData(DataNotValid):
-    def __init__(self, *args, **kwargs):
-        logging.error('Class UnexpectedData is deprecated. Use DataNotValid.')
-        super(UnexpectedData, self).__init__(*args, **kwargs)
-
-
-class HttpCodeUnexpected(HttpCodeNotValid):
-    def __init__(self, *args, **kwargs):
-        logging.error('Class HttpCodeUnexpected is deprecated. '
-                      'Use HttpCodeNotValid.')
-        super(HttpCodeUnexpected, self).__init__(*args, **kwargs)
-
-
-class UnexpectedContent(DataNotValid):
-    def __init__(self, *args, **kwargs):
-        logging.error('Class UnexpectedContent is deprecated. '
-                      'Use DataNotValid.')
-        super(UnexpectedContent, self).__init__(*args, **kwargs)
