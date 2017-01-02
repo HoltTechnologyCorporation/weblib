@@ -3,7 +3,7 @@ Text parsing and processing utilities.
 """
 import re
 
-from weblib.error import RuntimeConfigError, DataNotFound
+from weblib.error import DataNotFound
 #from weblib.py3k_support import *
 
 RE_NUMBER = re.compile(r'\d+')
@@ -64,7 +64,7 @@ def remove_bom(text):
     Remove BOM-sequence from the start of byte string.
     """
     if isinstance(text, unicode):
-        raise RuntimeConfigError('remove_bom function accepts only byte strings')
+        raise RuntimeConfigError('The function remove_bom accepts only byte strings')
     if text.startswith(BOM_TOKEN):
         return text[3:]
     else:

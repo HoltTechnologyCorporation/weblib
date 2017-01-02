@@ -11,7 +11,6 @@ from lxml.html.clean import clean_html
 from weblib.etree import truncate_html
 from weblib.html import strip_tags
 from weblib.text import remove_bom
-from weblib.error import DataNotFound, RuntimeConfigError
 
 log = logging.getLogger('weblib.feed')
 

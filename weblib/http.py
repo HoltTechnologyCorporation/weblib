@@ -7,7 +7,6 @@ import re
 import logging
 import six
 
-from weblib.error import RuntimeConfigError
 from weblib.encoding import make_str, make_unicode, decode_pairs
 
 from weblib.py3k_support import *
@@ -150,7 +149,6 @@ def normalize_unicode(value, charset='utf-8'):
     if not isinstance(value, unicode):
         return value
     else:
-        #raise RuntimeConfigError('normalize_unicode function accepts only unicode values')
         return value.encode(charset, 'ignore')
 
 

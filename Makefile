@@ -1,3 +1,15 @@
+build: venv deps develop
+
+venv:
+	virtualenv --no-site-packages --python=python3.4 .env
+	
+deps:
+	.env/bin/pip install -r requirements_dev.txt
+	#.env/bin/pip install -r requirements_full.txt
+
+develop:
+	.env/bin/python setup.py develop
+
 flake:
 	flake8 weblib test
 

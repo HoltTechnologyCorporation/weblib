@@ -1,21 +1,19 @@
-import warnings
 import logging
 
-
-# WTF Grab doing here?
-def warn(msg):
-    warnings.warn(msg, category=GrabDeprecationWarning, stacklevel=3)
-
-
-# ***********************************
-# Base Classes to build Custom Errors
-# ***********************************
 
 class WeblibError(Exception):
     """
     Base class for all custom exceptions
     defined in weblib package.
     """
+
+
+class DataNotFound(WeblibError, IndexError):
+    """
+    Raised when it is not possible to find requested
+    data.
+    """
+
 
 class ResponseNotValid(WeblibError):
     pass
@@ -29,17 +27,6 @@ class RuntimeConfigError(WeblibError):
     """
     Raised when passed parameters do not makes sense
     or conflict with something.
-    """
-
-
-# **********************
-# Data Processing Errors
-# **********************
-
-class DataNotFound(WeblibError, IndexError):
-    """
-    Raised when it is not possible to find requested
-    data.
     """
 
 
