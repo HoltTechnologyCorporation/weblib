@@ -1,27 +1,8 @@
 import logging
 
-
-class WeblibError(Exception):
-    """
-    Base class for all custom exceptions
-    defined in weblib package.
-    """
-
-
-class DataNotFound(WeblibError, IndexError):
-    """
-    Raised when it is not possible to find requested
-    data.
-    """
-
-
-class ResponseNotValid(WeblibError):
-    pass
-
-
-# ********************
-# Errors inside weblib
-# ********************
+# **************************
+# Internal weblib exceptions
+# **************************
 
 class RuntimeConfigError(WeblibError):
     """
@@ -29,10 +10,41 @@ class RuntimeConfigError(WeblibError):
     or conflict with something.
     """
 
+# ************
+# Base classes
+# ************
 
-# *****************************
-# ResponseNotValid based Classes
-# *****************************
+class WeblibError(Exception):
+    """
+    Base class for all custom exceptions
+    defined in weblib package.
+    """
+
+class ResponseNotValid(WeblibError):
+    """
+    Indicates unexpected data received in the
+    result of network request.
+    """
+
+# **********************
+# Data not found classes
+# **********************
+
+class DataNotFound(WeblibError, IndexError):
+    """
+    Raised when it is not possible to find requested
+    data.
+    """
+
+class NextPageNotFound(DataNotFound):
+    """
+    Raised when the scraping logic could not extract link
+    to next page from the pagination block
+    """
+
+# ******************************
+# ResponseNotValid based classes
+# ******************************
 
 class DataNotValid(ResponseNotValid):
     pass
@@ -53,7 +65,6 @@ class PageNotFound(ResponseNotValid):
 class AccessDenied(ResponseNotValid):
     pass
 
-
 # *****************************
 # ResponseNotValid based Classes
 # specific to HTTP code errors
@@ -64,11 +75,4 @@ class HttpCodeNotValid(ResponseNotValid):
 
 
 class HttpCodeZero(HttpCodeNotValid):
-    pass
-
-
-# ********************
-# Other Errors
-# ********************
-class NextPageNotFound(WeblibError):
     pass
