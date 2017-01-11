@@ -1,15 +1,5 @@
 import logging
 
-# **************************
-# Internal weblib exceptions
-# **************************
-
-class RuntimeConfigError(WeblibError):
-    """
-    Raised when passed parameters do not makes sense
-    or conflict with something.
-    """
-
 # ************
 # Base classes
 # ************
@@ -24,6 +14,16 @@ class ResponseNotValid(WeblibError):
     """
     Indicates unexpected data received in the
     result of network request.
+    """
+
+# **************************
+# Internal weblib exceptions
+# **************************
+
+class RuntimeConfigError(WeblibError):
+    """
+    Raised when passed parameters do not makes sense
+    or conflict with something.
     """
 
 # **********************
