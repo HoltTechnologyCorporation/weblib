@@ -6,7 +6,6 @@ from hashlib import sha1
 from time import mktime
 from datetime import datetime
 import feedparser
-from lxml.html.clean import clean_html
 
 from weblib.etree import truncate_html
 from weblib.html import strip_tags
@@ -68,6 +67,8 @@ def parse_entry_teaser(entry, size):
 
 
 def build_entry_content(entry, teaser=False, teaser_size=None):
+    from lxml.html.clean import clean_html
+
     content = clean_html(parse_entry_content(entry))
     if teaser:
         content = truncate_html(content, teaser_size)

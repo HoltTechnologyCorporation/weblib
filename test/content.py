@@ -1,11 +1,12 @@
 # coding: utf-8
 from unittest import TestCase
-from lxml.html import fromstring
 
 from weblib.content import find_content_blocks
 
 class ContentTestCase(TestCase):
     def test_find_content_blocks(self):
+        from lxml.html import fromstring
+
         porno = u'порно ' * 100
         redis = u'редис ' * 100
         html = ('<div>%s</div><p>%s' % (porno, redis))
