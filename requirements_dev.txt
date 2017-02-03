@@ -1,6 +1,5 @@
 pytest
 pytest-cov
-#coverage
 coveralls
 flake8
 bumpversion

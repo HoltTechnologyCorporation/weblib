@@ -16,3 +16,4 @@
 /dist/
 /docs/build/
 /coverage.xml
+/.cache/
