@@ -17,10 +17,10 @@ setup(
     ],
     extras_require={
         'full': [
-            'lxml;platform_system!="Windows"',
             'feedparser',
             'selenium',
         ],
+        'full:platform_system!="Windows"': ['lxml'],
     },
     packages = find_packages(exclude=['test']),
     license = "MIT",
