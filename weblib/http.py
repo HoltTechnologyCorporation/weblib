@@ -117,39 +117,30 @@ def normalize_http_values(items, charset='utf-8', ignore_classes=None):
 
     def process(item):
         key, value = item
-
+        # Process key
+        if isinstance(key, unicode):
+            key = make_str(key, encoding=charset)
+        # Process value
         if ignore_classes and isinstance(value, ignore_classes):
             pass
         elif isinstance(value, unicode):
-            value = normalize_unicode(value, charset=charset)
+            value = make_str(value, encoding=charset)
         elif value is None:
-            value = ''
+            value = b''
+        elif isinstance(value, (list, tuple)):
+            for subval in value:
+                for res in process((key, subval)):
+                    yield res
+            return
         else:
-            value = str(value)
+            value = make_str(value)
+        yield key, value
 
-        if isinstance(key, unicode):
-            key = normalize_unicode(key, charset=charset)
-
-        return key, value
-
-    items =  list(map(process, items))
-    #items = sorted(items, key=lambda x: x[0])
-    return items
-
-
-def normalize_unicode(value, charset='utf-8'):
-    """
-    Convert unicode into byte-string using detected charset (default or from
-    previous response)
-
-    By default, charset from previous response is used to encode unicode into
-    byte-string but you can enforce charset with ``charset`` option
-    """
-
-    if not isinstance(value, unicode):
-        return value
-    else:
-        return value.encode(charset, 'ignore')
+    ret = []
+    for item in items:
+        for yield_item in process(item):
+            ret.append(yield_item)
+    return ret
 
 
 def normalize_url(url):
@@ -177,9 +168,10 @@ def normalize_post_data(data, charset):
         # bytes-string should be posted as-is
         # unicode should be converted into byte-string
         if isinstance(data, unicode):
-            return normalize_unicode(data, charset)
+            return make_str(data, charset)
         else:
             return data
     else:
         # dict, tuple, list should be serialized into byte-string
+        # it calls `normalize_http_values()`
         return smart_urlencode(data, charset)
