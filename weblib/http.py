@@ -165,11 +165,11 @@ def normalize_url(url):
     return url
 
 
-def normalize_post_data(data, encoding):
+def normalize_post_data(data, encoding='utf-8'):
     if isinstance(data, six.text_type):
-        return make_str(data, encoding=charset)
+        return make_str(data, encoding=encoding)
     elif isinstance(data, six.binary_type):
         return data
     else:
         # it calls `normalize_http_values()`
-        return smart_urlencode(data, charset)
+        return make_str(smart_urlencode(data, encoding))

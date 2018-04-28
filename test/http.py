@@ -2,7 +2,10 @@
 from unittest import TestCase
 from six.moves.urllib.parse import quote
 
-from weblib.http import normalize_url, RESERVED_CHARS, normalize_http_values
+from weblib.http import (
+    normalize_url, RESERVED_CHARS, normalize_http_values,
+    normalize_post_data,
+)
 
 class HttpTestCase(TestCase):
     def test_normalize_url_idn(self):
@@ -134,4 +137,22 @@ class HttpTestCase(TestCase):
                 ignore_classes=Bar,
             ),
             [(b'foo', b'I am foo'), (b'bar', bar)]
+        )
+
+    def test_normalize_post_data_str(self):
+        self.assertEqual(
+            normalize_post_data(u'фыва'),
+            u'фыва'.encode('utf-8'),
+        )
+
+    def test_normalize_post_data_bytes(self):
+        self.assertEqual(
+            normalize_post_data(u'фыва'.encode('utf-8')),
+            u'фыва'.encode('utf-8'),
+        )
+
+    def test_normalize_post_data_non_text(self):
+        self.assertEqual(
+            normalize_post_data([('bar', 1), ('bar', [3, 4])]),
+            b'bar=1&bar=3&bar=4',
         )
