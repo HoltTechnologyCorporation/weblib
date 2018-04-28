@@ -79,3 +79,25 @@ class HttpTestCase(TestCase):
             normalize_http_values([('foo', None)]),
             [(b'foo', b'')]
         )
+
+    def test_normalize_http_values_number(self):
+        self.assertEqual(
+            normalize_http_values([('foo', 13)]),
+            [(b'foo', b'13')]
+        )
+
+    def test_normalize_http_values_unicode(self):
+        self.assertEqual(
+            normalize_http_values([('foo', u'фыва')]),
+            [(b'foo', u'фыва'.encode('utf-8'))]
+        )
+
+    def test_normalize_http_values_object(self):
+        class Foo(object):
+            def __str__(self):
+                return 'I am foo'
+
+        self.assertEqual(
+            normalize_http_values([('foo', Foo())]),
+            [(b'foo', b'I am foo')]
+        )
