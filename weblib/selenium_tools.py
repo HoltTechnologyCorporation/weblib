@@ -12,7 +12,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import WebDriverException
 from random import randint
 
-from weblib.py3k_support import *
+import six
 
 
 def delete_dir(path):
@@ -137,7 +137,7 @@ def close_alert(browser, times=3):
     By default, send multiple ENTER signals.
     """
 
-    for x in xrange(times):
+    for x in six.moves.range(times):
         try:
             ActionChains(browser).send_keys(Keys.ENTER).perform()
         except WebDriverException as ex:

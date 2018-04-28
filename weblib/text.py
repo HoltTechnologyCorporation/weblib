@@ -4,7 +4,6 @@ Text parsing and processing utilities.
 import re
 
 from weblib.error import DataNotFound
-#from weblib.py3k_support import *
 
 RE_NUMBER = re.compile(r'\d+')
 RE_NUMBER_WITH_SPACES = re.compile(r'\d[\s\d]*', re.U)

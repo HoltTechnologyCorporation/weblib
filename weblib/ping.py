@@ -4,7 +4,7 @@ import os
 from weblib import html
 from weblib.pwork import make_work
 from weblib.encoding import smart_str
-from weblib.py3k_support import *
+
 
 PING_XML = """<?xml version="1.0"?>
 <methodCall>
@@ -45,7 +45,7 @@ def ping(name, url, grab, thread_number=10):
         try:
             grab.go(rpc_url, post=post)
         except Exception as ex:
-            logging.error(unicode(ex))
+            logging.error(ex)
         else:
             if not '<boolean>0' in grab.response.body:
                 logging.error('%s : FAIL' % rpc_url)

@@ -2,7 +2,7 @@ import time
 import logging
 from random import randint
 
-from weblib.py3k_support import *
+import six
 
 logger = logging.getLogger('weblib.control')
 
@@ -39,7 +39,7 @@ def repeat(func, limit=3, args=None, kwargs=None,
         data = repeat(download, 3, args=['http://google.com/'])
 
     """
-    for try_count in xrange(1, limit + 1):
+    for try_count in six.moves.range(1, limit + 1):
         try:
             res = func(*(args or ()), **(kwargs or {}))
         except Exception as ex:

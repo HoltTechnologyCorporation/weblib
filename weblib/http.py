@@ -9,8 +9,6 @@ import six
 
 from weblib.encoding import make_str, make_unicode, decode_pairs
 
-from weblib.py3k_support import *
-
 # I do not know, what the hell is going on, but sometimes
 # when IDN url should be requested grab fails with error
 # LookupError: unknown encoding: punycode
@@ -118,12 +116,12 @@ def normalize_http_values(items, charset='utf-8', ignore_classes=None):
     def process(item):
         key, value = item
         # Process key
-        if isinstance(key, unicode):
+        if isinstance(key, six.text_type):
             key = make_str(key, encoding=charset)
         # Process value
         if ignore_classes and isinstance(value, ignore_classes):
             pass
-        elif isinstance(value, unicode):
+        elif isinstance(value, six.text_type):
             value = make_str(value, encoding=charset)
         elif value is None:
             value = b''
@@ -163,15 +161,11 @@ def normalize_url(url):
     return url
 
 
-def normalize_post_data(data, charset):
-    if isinstance(data, (six.binary_type, six.text_type)):
-        # bytes-string should be posted as-is
-        # unicode should be converted into byte-string
-        if isinstance(data, unicode):
-            return make_str(data, charset)
-        else:
-            return data
+def normalize_post_data(data, encoding):
+    if isinstance(data, six.text_type):
+        return make_str(data, encoding=charset)
+    elif isinstance(data, six.binary_type):
+        return data
     else:
-        # dict, tuple, list should be serialized into byte-string
         # it calls `normalize_http_values()`
         return smart_urlencode(data, charset)

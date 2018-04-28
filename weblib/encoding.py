@@ -1,8 +1,6 @@
 import re
 import six
 
-from weblib.py3k_support import *
-
 RE_SPECIAL_ENTITY = re.compile(b'&#(1[2-6][0-9]);')
 
 
@@ -16,7 +14,7 @@ def make_str(value, encoding='utf-8', errors='strict'):
     elif isinstance(value, six.binary_type):
         return value
     else:
-        return six.u(value).encode(encoding, errors=errors)
+        return six.u(str(value)).encode(encoding, errors=errors)
 
 
 def make_unicode(value, encoding='utf-8', errors='strict'):
@@ -29,7 +27,7 @@ def make_unicode(value, encoding='utf-8', errors='strict'):
     elif isinstance(value, six.binary_type):
         return value.decode(encoding, errors=errors)
     else:
-        return six.u(value)
+        return six.u(str(value))
 
 
 def special_entity_handler(match):

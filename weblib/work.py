@@ -6,7 +6,7 @@ except ImportError:
     from queue import Queue, Empty
 import logging
 
-from weblib.py3k_support import *
+import six
 
 STOP = object()
 
@@ -48,7 +48,7 @@ def make_work(callback, tasks, limit, ignore_exceptions=True,
     
     # If tasks is number convert it to the list of number
     if isinstance(tasks, int):
-        tasks = xrange(tasks)
+        tasks = six.moves.range(tasks)
 
     # Ensure that tasks sequence is iterator
     tasks = iter(tasks)    
@@ -60,7 +60,7 @@ def make_work(callback, tasks, limit, ignore_exceptions=True,
 
     # Prepare and run up to "limit" threads
     threads = []
-    for x in xrange(limit):
+    for x in six.moves.range(limit):
         thread = Worker(callback, taskq, resultq, ignore_exceptions)
         thread.daemon = True
         thread.start()
@@ -74,7 +74,7 @@ def make_work(callback, tasks, limit, ignore_exceptions=True,
             for task in task_iter:
                 task_queue.put(task)
         finally:
-            for x in xrange(limit):
+            for x in six.moves.range(limit):
                 task_queue.put(STOP)
 
     processor = Thread(target=task_processor, args=[tasks, taskq, limit])
@@ -112,7 +112,7 @@ if __name__ == '__main__':
         return currentThread().name, arg
 
     def tasks():
-        for x in xrange(10):
+        for x in six.moves.range(10):
             logging.debug('Generating task #%d' % x)
             time.sleep(random())
             yield (x,)
