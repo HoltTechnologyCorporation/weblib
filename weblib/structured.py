@@ -1,6 +1,3 @@
-from weblib.py3k_support import *
-
-
 class DotDict(dict):
     def __getattr__(self, item):
         if hasattr(self, item):
@@ -76,8 +73,12 @@ class TreeInterface(object):
                     if res:
                         item.update(res[0])
                 for key, value in structure._kwargs.items():
-                    if isinstance(value, basestring):
-                        chunk = Chunk(value, apply_func=lambda item: unicode(item).strip())
+                    if isinstance(value, six.string_types):
+                        if isinstance(value, six.text_type):
+                            func = lambda x: x.strip()
+                        else:
+                            func = lambda x: six.u(x).strip()
+                        chunk = Chunk(value, apply_func=func)
                         item[key] = chunk.prepare_element(element)
                     if isinstance(value, Structure):
                         item[key] = parser(element, value)
@@ -92,7 +93,7 @@ class TreeInterface(object):
             return items
 
         structure = None
-        if isinstance(xpath, basestring):
+        if isinstance(xpath, six.string_types):
             structure = Structure(xpath, *args, **kwargs)
         elif isinstance(xpath, Structure):
             structure = xpath

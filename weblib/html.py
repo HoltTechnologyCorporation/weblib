@@ -11,7 +11,6 @@ import logging
 
 from weblib.text import normalize_space as normalize_space_func
 import six
-#from weblib.py3k_support import *
 
 RE_TAG = re.compile(r'<[^>]+>')
 RE_REFRESH_TAG = re.compile(r'<meta[^>]+http-equiv\s*=\s*["\']*Refresh[^>]+', re.I)

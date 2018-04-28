@@ -3,10 +3,10 @@ Functions to process content of lxml nodes.
 """
 import re
 
+import six
+
 from weblib.text import normalize_space as normalize_space_func, find_number
 from weblib.encoding import smart_str, smart_unicode
-
-from weblib.py3k_support import *
 
 RE_TAG_START = re.compile(r'<[a-z]')
 
@@ -23,7 +23,7 @@ def get_node_text(node, smart=False, normalize_space=True):
     """
 
     # If xpath return a attribute value, it value will be string not a node
-    if isinstance(node, basestring):
+    if isinstance(node, six.string_types):
         if normalize_space:
             node = normalize_space_func(node)
         return node
@@ -102,7 +102,7 @@ def truncate_html(html, limit, encoding='utf-8'):
     Truncate html data to specified length and then fix broken tags.
     """
 
-    if not isinstance(html, unicode):
+    if not isinstance(html, six.text_type):
         html = html.decode(encoding)
     truncated_html = html[:limit]
     elem = parse_html(truncated_html, encoding=encoding)

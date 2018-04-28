@@ -1,6 +1,6 @@
 import os
 
-from weblib.py3k_support import *
+import six
 
 SCALE = {'kB': 1024.0, 'mB': 1024.0 * 1024.0,
          'KB': 1024.0, 'MB': 1024.0 * 1024.0}
@@ -26,7 +26,7 @@ def memory_usage(since=0, render=True, pid=None):
         if render:
             metrics = ['b', 'Kb', 'Mb', 'Gb']
             metric = metrics.pop(0)
-            for x in xrange(3):
+            for x in six.moves.range(3):
                 if mem > 1024:
                     mem /= 1024.0
                     metric = metrics.pop(0)

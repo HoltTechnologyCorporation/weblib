@@ -9,8 +9,6 @@ import six
 
 from weblib.encoding import make_str, make_unicode, decode_pairs
 
-from weblib.py3k_support import *
-
 # I do not know, what the hell is going on, but sometimes
 # when IDN url should be requested grab fails with error
 # LookupError: unknown encoding: punycode
@@ -115,41 +113,36 @@ def normalize_http_values(items, charset='utf-8', ignore_classes=None):
     if isinstance(items, dict):
         items = items.items()
 
+    # Fix list into tuple because isinstance works only with tupled sequences
+    if isinstance(ignore_classes, list):
+        ignore_classes = tuple(ignore_classes)
+
     def process(item):
         key, value = item
-
+        # Process key
+        if isinstance(key, six.text_type):
+            key = make_str(key, encoding=charset)
+        # Process value
         if ignore_classes and isinstance(value, ignore_classes):
             pass
-        elif isinstance(value, unicode):
-            value = normalize_unicode(value, charset=charset)
+        elif isinstance(value, six.text_type):
+            value = make_str(value, encoding=charset)
         elif value is None:
-            value = ''
+            value = b''
+        elif isinstance(value, (list, tuple)):
+            for subval in value:
+                for res in process((key, subval)):
+                    yield res
+            return
         else:
-            value = str(value)
+            value = make_str(value)
+        yield key, value
 
-        if isinstance(key, unicode):
-            key = normalize_unicode(key, charset=charset)
-
-        return key, value
-
-    items =  list(map(process, items))
-    #items = sorted(items, key=lambda x: x[0])
-    return items
-
-
-def normalize_unicode(value, charset='utf-8'):
-    """
-    Convert unicode into byte-string using detected charset (default or from
-    previous response)
-
-    By default, charset from previous response is used to encode unicode into
-    byte-string but you can enforce charset with ``charset`` option
-    """
-
-    if not isinstance(value, unicode):
-        return value
-    else:
-        return value.encode(charset, 'ignore')
+    ret = []
+    for item in items:
+        for yield_item in process(item):
+            ret.append(yield_item)
+    return ret
 
 
 def normalize_url(url):
@@ -172,14 +165,11 @@ def normalize_url(url):
     return url
 
 
-def normalize_post_data(data, charset):
-    if isinstance(data, (six.binary_type, six.text_type)):
-        # bytes-string should be posted as-is
-        # unicode should be converted into byte-string
-        if isinstance(data, unicode):
-            return normalize_unicode(data, charset)
-        else:
-            return data
+def normalize_post_data(data, encoding):
+    if isinstance(data, six.text_type):
+        return make_str(data, encoding=charset)
+    elif isinstance(data, six.binary_type):
+        return data
     else:
-        # dict, tuple, list should be serialized into byte-string
+        # it calls `normalize_http_values()`
         return smart_urlencode(data, charset)

@@ -2,7 +2,7 @@
 from unittest import TestCase
 from six.moves.urllib.parse import quote
 
-from weblib.http import normalize_url, RESERVED_CHARS
+from weblib.http import normalize_url, RESERVED_CHARS, normalize_http_values
 
 class HttpTestCase(TestCase):
     def test_normalize_url_idn(self):
@@ -61,3 +61,77 @@ class HttpTestCase(TestCase):
         fragment = RESERVED_CHARS.replace('#', '')
         url = 'http://domain.com/%s?%s#%s' % (path, query, fragment)
         self.assertEqual(url, normalize_url(url))
+
+    def test_normalize_http_values_list(self):
+        self.assertEqual(
+            normalize_http_values([('foo', ['1', '2'])]),
+            [(b'foo', b'1'), (b'foo', b'2')]
+        )
+
+    def test_normalize_http_values_scalar_and_list(self):
+        self.assertEqual(
+            normalize_http_values([('foo', '3'), ('foo', ['1', '2'])]),
+            [(b'foo', b'3'), (b'foo', b'1'), (b'foo', b'2')]
+        )
+
+    def test_normalize_http_values_none(self):
+        self.assertEqual(
+            normalize_http_values([('foo', None)]),
+            [(b'foo', b'')]
+        )
+
+    def test_normalize_http_values_number(self):
+        self.assertEqual(
+            normalize_http_values([('foo', 13)]),
+            [(b'foo', b'13')]
+        )
+
+    def test_normalize_http_values_unicode(self):
+        self.assertEqual(
+            normalize_http_values([('foo', u'фыва')]),
+            [(b'foo', u'фыва'.encode('utf-8'))]
+        )
+
+    def test_normalize_http_values_object(self):
+        class Foo(object):
+            def __str__(self):
+                return 'I am foo'
+
+        self.assertEqual(
+            normalize_http_values([('foo', Foo())]),
+            [(b'foo', b'I am foo')]
+        )
+
+    def test_normalize_http_values_ignore_classes_list(self):
+        class Foo(object):
+            def __str__(self):
+                return 'I am foo'
+
+        class Bar(object):
+            pass
+
+        bar = Bar()
+        self.assertEqual(
+            normalize_http_values(
+                [('foo', Foo()), ('bar', bar)],
+                ignore_classes=[Bar],
+            ),
+            [(b'foo', b'I am foo'), (b'bar', bar)]
+        )
+
+    def test_normalize_http_values_ignore_classes_scalar(self):
+        class Foo(object):
+            def __str__(self):
+                return 'I am foo'
+
+        class Bar(object):
+            pass
+
+        bar = Bar()
+        self.assertEqual(
+            normalize_http_values(
+                [('foo', Foo()), ('bar', bar)],
+                ignore_classes=Bar,
+            ),
+            [(b'foo', b'I am foo'), (b'bar', bar)]
+        )

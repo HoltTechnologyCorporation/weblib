@@ -1,9 +1,10 @@
 import re
 
+import six
+
 from weblib.error import DataNotFound
 from weblib.text import normalize_space
 from weblib.html import decode_entities
-from weblib.py3k_support import *
 
 REGEXP_CACHE = {}
 NULL = object()
@@ -66,7 +67,7 @@ def normalize_regexp(regexp, flags=0):
     Compile string into regular expression object.
     """
 
-    if isinstance(regexp, basestring):
+    if isinstance(regexp, six.string_types):
         return cache_regexp(regexp, flags)
     else:
         return regexp
