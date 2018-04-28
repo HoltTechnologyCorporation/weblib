@@ -1,3 +1,6 @@
+import six
+
+
 class DotDict(dict):
     def __getattr__(self, item):
         if hasattr(self, item):

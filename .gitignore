@@ -17,3 +17,4 @@
 /docs/build/
 /coverage.xml
 /.cache/
+/.pytest_cache/

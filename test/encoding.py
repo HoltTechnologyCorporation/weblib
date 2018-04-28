@@ -1,7 +1,9 @@
 # coding: utf-8
 from unittest import TestCase
 
-from weblib.encoding import make_str, make_unicode
+from weblib.encoding import (
+    make_str, make_unicode, fix_special_entities
+)
 
 
 class EncodingTestCase(TestCase):
@@ -58,3 +60,8 @@ class EncodingTestCase(TestCase):
             make_unicode(None),
             u'None',
         )
+
+    def test_fix_special_entities(self):
+        # just test it not fails
+        # I forgot what does it do exactly
+        fix_special_entities(b'&#128;')

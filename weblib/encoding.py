@@ -34,7 +34,7 @@ def special_entity_handler(match):
     num = int(match.group(1))
     if 128 <= num <= 160:
         try:
-            num = unichr(num).encode('utf-8')
+            num = six.unichr(num).encode('utf-8')
             return smart_str('&#%d;' % ord(num.decode('cp1252')[1]))
         except UnicodeDecodeError:
             return match.group(0)
