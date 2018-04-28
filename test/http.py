@@ -101,3 +101,37 @@ class HttpTestCase(TestCase):
             normalize_http_values([('foo', Foo())]),
             [(b'foo', b'I am foo')]
         )
+
+    def test_normalize_http_values_ignore_classes_list(self):
+        class Foo(object):
+            def __str__(self):
+                return 'I am foo'
+
+        class Bar(object):
+            pass
+
+        bar = Bar()
+        self.assertEqual(
+            normalize_http_values(
+                [('foo', Foo()), ('bar', bar)],
+                ignore_classes=[Bar],
+            ),
+            [(b'foo', b'I am foo'), (b'bar', bar)]
+        )
+
+    def test_normalize_http_values_ignore_classes_scalar(self):
+        class Foo(object):
+            def __str__(self):
+                return 'I am foo'
+
+        class Bar(object):
+            pass
+
+        bar = Bar()
+        self.assertEqual(
+            normalize_http_values(
+                [('foo', Foo()), ('bar', bar)],
+                ignore_classes=Bar,
+            ),
+            [(b'foo', b'I am foo'), (b'bar', bar)]
+        )

@@ -113,6 +113,10 @@ def normalize_http_values(items, charset='utf-8', ignore_classes=None):
     if isinstance(items, dict):
         items = items.items()
 
+    # Fix list into tuple because isinstance works only with tupled sequences
+    if isinstance(ignore_classes, list):
+        ignore_classes = tuple(ignore_classes)
+
     def process(item):
         key, value = item
         # Process key
