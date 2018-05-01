@@ -156,3 +156,16 @@ class HttpTestCase(TestCase):
             normalize_post_data([('bar', 1), ('bar', [3, 4])]),
             b'bar=1&bar=3&bar=4',
         )
+
+    def test_deprecated_normalize_unicode(self):
+        # weblib.http.normalize_unicode is required by grab release
+        from weblib.http import normalize_unicode
+        self.assertEqual(
+            normalize_unicode(u'фыва'),
+            u'фыва'.encode('utf-8')
+        )
+        self.assertEqual(
+            normalize_unicode(u'фыва'.encode('utf-8')),
+            u'фыва'.encode('utf-8')
+        )
+        self.assertEqual(normalize_unicode(1), b'1')

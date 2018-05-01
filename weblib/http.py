@@ -173,3 +173,13 @@ def normalize_post_data(data, encoding='utf-8'):
     else:
         # it calls `normalize_http_values()`
         return make_str(smart_urlencode(data, encoding))
+
+
+# ****************
+# Deprecated stuff
+# ****************
+
+# This function have to exist for backward compatibility
+# with Grab release
+def normalize_unicode(value, charset='utf-8'):
+    return make_str(value, encoding=charset, errors='ignore')

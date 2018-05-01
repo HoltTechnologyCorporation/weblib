@@ -5,7 +5,7 @@ ROOT = os.path.dirname(os.path.realpath(__file__))
 
 setup(
     name = 'weblib',
-    version = '0.1.28',
+    version = '0.1.29',
     description = 'Set of tools for web scraping projects',
     long_description=open(os.path.join(ROOT, 'README.rst')).read(),
     author = 'Gregory Petukhov',
