@@ -3,7 +3,7 @@ Text parsing and processing utilities.
 """
 import re
 
-from weblib.error import DataNotFound
+from weblib.error import DataNotFound, WeblibError
 
 RE_NUMBER = re.compile(r'\d+')
 RE_NUMBER_WITH_SPACES = re.compile(r'\d[\s\d]*', re.U)
@@ -63,7 +63,7 @@ def remove_bom(text):
     Remove BOM-sequence from the start of byte string.
     """
     if isinstance(text, unicode):
-        raise RuntimeConfigError('The function remove_bom accepts only byte strings')
+        raise WeblibError('The function remove_bom accepts only byte strings')
     if text.startswith(BOM_TOKEN):
         return text[3:]
     else:
