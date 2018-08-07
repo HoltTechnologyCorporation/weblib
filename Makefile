@@ -30,6 +30,6 @@ doc:
 	sh -c 'cd docs; make html'
 
 upload:
-	python setup.py sdist upload
+	git push --tags; python setup.py sdist upload
 
 .PHONY: all build venv flake test vtest testloop cov clean doc
